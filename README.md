@@ -1,3 +1,9 @@
+# Converted to script and running via GitHub Actions
+
+- Add the twitter keys to the repo by following https://docs.github.com/en/codespaces/managing-codespaces-for-your-organization/managing-encrypted-secrets-for-your-repository-and-organization-for-github-codespaces#adding-secrets-for-a-repository
+- create https://github.com/animesh/Twitter-Sentiment-Analysis-Projects-2022-/blob/master/.github/workflows/main.yml 
+
+
 # Twitter-Sentiment-Analysis-Projects (2022)
 - By Nikita Silaparasetty
 

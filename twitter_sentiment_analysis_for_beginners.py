@@ -20,7 +20,7 @@ auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 query = "disease"
 filtered = query + "-filter:retweets"
-tweets = tweepy.Cursor(api.search_tweets,q=filtered,lang="en").items(10)
+tweets = tweepy.Cursor(api.search_tweets,q=filtered,lang="en").items(2500)
 list1 = [[tweet.text, tweet.user.screen_name, tweet.user.location] for tweet in tweets]
 df = pd.DataFrame(data=list1, columns=['tweets','user', "location"])
 tweet_list = df.tweets.to_list()
@@ -76,6 +76,8 @@ print("%f percent of twitter users feel positive about %s"%(pos,query))
 print("%f percent of twitter users feel negative about %s"%(neg,query))
 print("%f percent of twitter users feel neutral about %s"%(neu,query))
 all_words = ' '.join([text for text in cleaned])
+all_words=all_words.replace(query, '')
+all_words=re.sub(r'\b\w\b', ' ', all_words)
 wordcloud = WordCloud(width=800, height=500, random_state=21, max_font_size=110).generate(all_words)
 plt.figure(figsize=(10, 7))
 plt.imshow(wordcloud, interpolation="bilinear")
