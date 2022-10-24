@@ -8,18 +8,19 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from wordcloud import WordCloud
 from better_profanity import profanity
+#https://docs.github.com/en/codespaces/managing-codespaces-for-your-organization/managing-encrypted-secrets-for-your-repository-and-organization-for-github-codespaces#adding-secrets-for-a-repository
 import os
-consumer_key = os.getenv['API_Key'].strip()
-consumer_secret = keyz['API_Key_Secret'].strip()
-bearer_token = keyz['Bearer_Token'].strip()
-access_token = keyz['Access_Token'].strip()
-access_token_secret = keyz['Access_Token_Secret'].strip()
+consumer_key = os.getenv('API_KEY')
+consumer_secret = os.getenv('API_KEY_SECRET')
+bearer_token = os.getenv('BEARER_TOKEN')
+access_token = os.getenv('ACCESS_TOKEN')
+access_token_secret = os.getenv('ACCESS_TOKEN_SECRET')
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 query = "disease"
 filtered = query + "-filter:retweets"
-tweets = tweepy.Cursor(api.search_tweets,q=filtered,lang="en").items(2500)
+tweets = tweepy.Cursor(api.search_tweets,q=filtered,lang="en").items(10)
 list1 = [[tweet.text, tweet.user.screen_name, tweet.user.location] for tweet in tweets]
 df = pd.DataFrame(data=list1, columns=['tweets','user', "location"])
 tweet_list = df.tweets.to_list()
@@ -41,17 +42,16 @@ def clean_tweet(tweet):
     r = " ".join(word for word in r)
     return r
 cleaned = [clean_tweet(tw) for tw in tweet_list]
-cleaned
 sentiment_objects = [TextBlob(tweet) for tweet in cleaned]
 sentiment_objects[0].polarity, sentiment_objects[0]
 sentiment_values = [[tweet.sentiment.polarity, str(tweet)] for tweet in sentiment_objects]
 sentiment_values[0]
 sentiment_values[0:99]
 sentiment_df = pd.DataFrame(sentiment_values, columns=["polarity", "tweet"])
-sentiment_df
 n=sentiment_df["polarity"]
+df["polarity"]=sentiment_df["polarity"]
+df.to_csv('df.csv')
 m=pd.Series(n)
-m
 pos=0
 neg=0
 neu=0
@@ -71,7 +71,7 @@ populationShare=[pos,neg,neu]
 figureObject, axesObject = plt.subplots()
 axesObject.pie(populationShare,labels=pieLabels,autopct='%1.2f',startangle=90)
 axesObject.axis('equal')
-plt.show()
+plt.savefig("pie.png",bbox_inches = "tight")
 print("%f percent of twitter users feel positive about %s"%(pos,query))
 print("%f percent of twitter users feel negative about %s"%(neg,query))
 print("%f percent of twitter users feel neutral about %s"%(neu,query))
@@ -80,4 +80,4 @@ wordcloud = WordCloud(width=800, height=500, random_state=21, max_font_size=110)
 plt.figure(figsize=(10, 7))
 plt.imshow(wordcloud, interpolation="bilinear")
 plt.axis('off')
-plt.show()
+plt.savefig("cloud.png",bbox_inches = "tight")
