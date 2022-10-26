@@ -11,6 +11,7 @@ from better_profanity import profanity
 #https://docs.github.com/en/codespaces/managing-codespaces-for-your-organization/managing-encrypted-secrets-for-your-repository-and-organization-for-github-codespaces#adding-secrets-for-a-repository
 import os
 consumer_key = os.getenv('API_KEY')
+#consumer_key = {{ tweetauth.API_KEY }}
 consumer_secret = os.getenv('API_KEY_SECRET')
 bearer_token = os.getenv('BEARER_TOKEN')
 access_token = os.getenv('ACCESS_TOKEN')
@@ -37,16 +38,14 @@ def clean_tweet(tweet):
     r = re.sub('\[.*?\]',' ', r)
     r = re.sub("[^a-z0-9]"," ", r)
     r = r.split()
-    stopwords = ["for", "on", "an", "a", "of", "and", "in", "the", "to", "from"]
+    stopwords = ["for", "on", "an", "a", "of", "and", "in", "the", "to", "from","end","stop"]
     r = [w for w in r if not w in stopwords]
     r = " ".join(word for word in r)
     return r
 cleaned = [clean_tweet(tw) for tw in tweet_list]
 sentiment_objects = [TextBlob(tweet) for tweet in cleaned]
-sentiment_objects[0].polarity, sentiment_objects[0]
+#print(sentiment_objects[0].polarity, sentiment_objects[0])
 sentiment_values = [[tweet.sentiment.polarity, str(tweet)] for tweet in sentiment_objects]
-sentiment_values[0]
-sentiment_values[0:99]
 sentiment_df = pd.DataFrame(sentiment_values, columns=["polarity", "tweet"])
 n=sentiment_df["polarity"]
 df["polarity"]=sentiment_df["polarity"]
@@ -78,6 +77,7 @@ print("%f percent of twitter users feel neutral about %s"%(neu,query))
 all_words = ' '.join([text for text in cleaned])
 all_words=all_words.replace(query, '')
 all_words=re.sub(r'\b\w\b', ' ', all_words)
+all_words=re.sub(r'\b\w\w\b', ' ', all_words)
 wordcloud = WordCloud(width=800, height=500, random_state=21, max_font_size=110).generate(all_words)
 plt.figure(figsize=(10, 7))
 plt.imshow(wordcloud, interpolation="bilinear")
