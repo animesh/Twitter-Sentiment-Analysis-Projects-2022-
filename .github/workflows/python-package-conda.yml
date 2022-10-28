@@ -2,6 +2,12 @@
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
 name: app
+  env:
+    API_KEY: ${{ secrets.API_KEY }}
+    API_KEY_SECRET: ${{ secrets.API_KEY_SECRET }}
+    BEARER_TOKEN: ${{ secrets.BEARER_TOKEN }}
+    ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+    ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
 
 on: 
   schedule:
