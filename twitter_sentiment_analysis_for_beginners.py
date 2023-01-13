@@ -21,12 +21,12 @@ auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 query = "disease"
 filtered = query + "-filter:retweets"
-tweets = tweepy.Cursor(api.search_tweets,q=filtered,lang="en").items(2500)
+tweets = tweepy.Cursor(api.search_tweets,q=filtered,lang="en").items(1000)
 list1 = [[tweet.text, tweet.user.screen_name, tweet.user.location] for tweet in tweets]
 df = pd.DataFrame(data=list1, columns=['tweets','user', "location"])
 tweet_list = df.tweets.to_list()
 def clean_tweet(tweet):
-    if type(tweet) == np.float:
+    if type(tweet) == np.float64:
         return ""
     r = tweet.lower()
     r = profanity.censor(r)
